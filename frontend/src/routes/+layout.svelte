@@ -1,6 +1,7 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import '@fontsource-variable/inter/wght.css';
 	import Footer from '../components/footer.svelte';
 
 	let { children } = $props();
