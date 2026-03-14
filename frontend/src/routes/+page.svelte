@@ -23,7 +23,8 @@
 			size: activeFile.size,
 			uploaded: 0,
 			url: null,
-			filename: activeFile.name
+			filename: activeFile.name,
+			err: null
 		};
 
 		uploadQueue.push(upload);
@@ -32,11 +33,20 @@
 		fetch('/api/upload', {
 			method: 'POST',
 			body: formData
-		}).then(async (res) => {
-			let url = await res.text();
-			upload.uploaded = upload.size;
-			upload.url = new URL(url, window.location.origin).href;
-		});
+		})
+			.then(async (res) => {
+				let status = res.status;
+				if (status == 200) {
+					let url = await res.text();
+					upload.uploaded = upload.size;
+					upload.url = new URL(url, window.location.origin).href;
+				} else {
+					upload.err = await res.text();
+				}
+			})
+			.catch((e) => {
+				upload.err = 'Network Error: ' + e;
+			});
 	}
 </script>
 

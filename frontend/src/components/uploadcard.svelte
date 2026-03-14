@@ -29,6 +29,10 @@
 				Click to copy download link
 			{/if}
 		</span>
+	{:else if upload.err}
+		<span class="truncate text-xs text-uploadcard-text/75">
+			Error! {upload.err}
+		</span>
 	{:else}
 		<ProgressBar value={upload.uploaded} max={upload.size} />
 	{/if}
