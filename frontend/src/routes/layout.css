@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+
+@theme {
+    --color-*: initial;
+
+    --color-background-main: #0a0a0a;
+    --color-background-card: #171717;
+
+    --color-text: #f0f0f0;
+    --color-dropzone: #555555;
+    --color-dropzone-text: #a0a0a0;
+    --color-dropzone-hover: #404040;
+    --color-button: #efefef;
+    --color-button-text: #000000;
+
+    --color-uploadcard-text: #f0f0f0;
+    --color-uploadcard-progressbar-background: #0f0f0f;
+    --color-uploadcard-progressbar-main: #bfbfbf;
+
+    --font-sans: ui-sans-serif, system-ui;
+    --font-mono: ui-monospace, monospace;
+
+}

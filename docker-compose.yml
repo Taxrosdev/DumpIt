@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    expose:
+      - "3000"
+    environment:
+      - UPLOAD_LIMIT=10
+      - UPLOAD_PATH="/upload"
+    restart: unless-stopped
+    volumes:
+      - ./upload:/upload
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+#    volumes:
+#      # If you want to customize the frontend and replace it, use this
+#      # You should probably use your own nginx.conf. 
+#      The current one is available in frontend/nginx.conf for reference!
+#      - ./PATH_TO_FRONTEND_REPLACEMENT:/var/web/html
