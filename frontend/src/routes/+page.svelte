@@ -40,9 +40,7 @@
 	}
 </script>
 
-<div
-	class="flex h-screen w-screen items-center justify-center gap-10 bg-background-main transition"
->
+<div class="flex h-full w-screen grow items-center justify-center gap-10 transition">
 	<Card class="items-center gap-4">
 		<FileSelect
 			{activeFile}
