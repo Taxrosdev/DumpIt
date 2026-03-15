@@ -25,7 +25,7 @@ pub fn get_upload_limit() -> usize {
     let raw_upload_limit: usize = 
         env.parse().expect("UPLOAD_LIMIT is not a number. It should be the max MB amount that can be uploaded per file.");
 
-    raw_upload_limit * 1000 * 1000
+    raw_upload_limit
 }
 
 pub fn get_upload_directory() -> PathBuf {

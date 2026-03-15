@@ -10,6 +10,18 @@
 	let uploadQueue: Upload[] = $state([]);
 	$inspect(uploadQueue);
 
+	// In KB
+	let limit: number | null = $state(null);
+	let isOverLimit = $derived(
+		activeFile && limit ? (activeFile as File).size > limit * 1024 : false
+	);
+
+	$effect(() => {
+		fetch('/api/meta/upload_limit').then(async (res) => {
+			limit = parseInt(await res.text());
+		});
+	});
+
 	function upload() {
 		if (!activeFile) {
 			return;
@@ -53,13 +65,15 @@
 <div class="flex h-full w-screen grow items-center justify-center gap-10 transition">
 	<Card class="items-center gap-4">
 		<FileSelect
+			{limit}
 			{activeFile}
+			{isOverLimit}
 			class="fileselect flex h-40 w-70 items-center justify-center overflow-clip rounded-md border-3 border-dashed transition"
 			setActiveFile={(file) => {
 				activeFile = file;
 			}}
 		/>
-		<Button class="" onclick={upload}>Upload</Button>
+		<Button disabled={isOverLimit || !activeFile} onclick={upload}>Upload</Button>
 	</Card>
 	<Card class="">
 		{#each uploadQueue as upload (upload.id)}

@@ -3,21 +3,21 @@
 		class: string;
 		activeFile: File | null;
 		setActiveFile: (file: File) => void;
+		limit: number | null;
+		isOverLimit: boolean;
 	}
 
-	let { class: className, activeFile, setActiveFile }: Props = $props();
+	let { class: className, activeFile, setActiveFile, limit, isOverLimit }: Props = $props();
 
 	let fileInput: HTMLInputElement;
 	let dropzone: HTMLElement;
 
 	let dragging = $state(false);
-
-	$inspect(activeFile);
-	$inspect(dragging);
 </script>
 
 <label
-	class={'text-dropzone ' + className + (dragging ? '' : ' bg-transparent')}
+	class="flex flex-col gap-1 text-dropzone {isOverLimit &&
+		' bg-overlimit/25 text-overlimit'} {className} {dragging ? '' : ' bg-transparent'}"
 	bind:this={dropzone}
 	ondragenter={(_e) => {
 		dragging = true;
@@ -53,9 +53,22 @@
 	/>
 
 	{#if activeFile}
-		<p class="text-sm wrap-break-word text-dropzone-text">{activeFile.name}</p>
+		<p
+			class="w-5/6 truncate text-center text-sm text-dropzone-text {isOverLimit &&
+				'text-overlimit/80'}"
+		>
+			{activeFile.name}
+		</p>
 	{:else}
 		<p class="text-sm text-dropzone-text">Drag a file here or click to upload a file</p>
+	{/if}
+
+	{#if limit}
+		<p class="text-sm text-dropzone-text {isOverLimit && 'text-overlimit/80'}">
+			Upload Limit: {limit / 1024}MB
+		</p>
+	{:else}
+		<p class="text-sm"></p>
 	{/if}
 </label>
 

@@ -19,6 +19,8 @@
 	--color-uploadcard-progressbar-background: #0f0f0f;
 	--color-uploadcard-progressbar-main: #bfbfbf;
 
+    --color-overlimit: #ee0000;
+
 	--font-sans: 'Inter Variable', sans-serif;
 	--font-mono: monospace;
 }

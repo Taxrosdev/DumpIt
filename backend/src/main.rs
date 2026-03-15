@@ -1,6 +1,6 @@
 pub mod routes;
 pub mod util;
-use routes::{download::download, upload::upload};
+use routes::{download::download, meta, upload::upload};
 use util::get_upload_limit;
 
 use axum::{
@@ -8,20 +8,20 @@ use axum::{
     extract::DefaultBodyLimit,
     routing::{get, post},
 };
-use tower_http::{
-    limit::RequestBodyLimitLayer,
-};
+use tower_http::limit::RequestBodyLimitLayer;
 
 pub static UPLOAD_PATH: &str = "./upload";
 pub static PREFIX: &str = "/api/download/";
 
 #[tokio::main]
 async fn main() {
-    let upload_limit = get_upload_limit();
+    // In bytes
+    let upload_limit = get_upload_limit() * 1024 * 1024;
 
     let app = Router::new()
         .route("/upload", post(upload))
         .route("/download/{hash}", get(download))
+        .route("/meta/upload_limit", get(meta::upload_limit))
         .layer(DefaultBodyLimit::disable())
         .layer(RequestBodyLimitLayer::new(upload_limit));
 
