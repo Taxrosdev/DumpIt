@@ -1,6 +1,10 @@
+pub mod db;
 pub mod routes;
 pub mod util;
+
 use routes::{download::download, meta, upload::upload};
+use std::sync::LazyLock;
+use tokio::signal;
 use util::get_upload_limit;
 
 use axum::{
@@ -12,6 +16,7 @@ use tower_http::limit::RequestBodyLimitLayer;
 
 pub static UPLOAD_PATH: &str = "./upload";
 pub static PREFIX: &str = "/api/download/";
+pub static DATABASE: LazyLock<db::Database> = LazyLock::new(db::Database::init);
 
 #[tokio::main]
 async fn main() {
@@ -29,6 +34,30 @@ async fn main() {
         .await
         .expect("could not bind to port 3000");
     axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
         .await
         .expect("axum error, could not serve")
+}
+
+#[cold]
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+
+    let terminate = async {
+        signal::unix::signal(signal::unix::SignalKind::terminate())
+            .expect("failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    tokio::select! {
+        _ = ctrl_c => {},
+        _ = terminate => {},
+    }
+
+    println!("signal received, starting graceful shutdown");
 }

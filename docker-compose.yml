@@ -1,4 +1,5 @@
 services:
+
   backend:
     build:
       context: ./backend
@@ -6,8 +7,9 @@ services:
     expose:
       - "3000"
     environment:
-      - UPLOAD_LIMIT=10
+      - UPLOAD_LIMIT=${UPLOAD_LIMIT}
       - UPLOAD_PATH="/upload"
+      - DATABASE_URL=${DATABASE_URL}
     restart: unless-stopped
     volumes:
       - ./upload:/upload
