@@ -18,6 +18,8 @@
 	--color-uploadcard-text: #f0f0f0;
 	--color-uploadcard-progressbar-background: #0f0f0f;
 	--color-uploadcard-progressbar-main: #bfbfbf;
+    --color-uploadcard-odd: #1a1a1a;
+    --color-uploadcard-even: #141414;
 
     --color-overlimit: #ee0000;
 

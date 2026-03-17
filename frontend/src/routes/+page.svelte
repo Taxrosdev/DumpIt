@@ -62,24 +62,26 @@
 	}
 </script>
 
-<div class="flex h-full w-screen grow items-center justify-center gap-10 transition">
-	<Card class="items-center gap-4">
-		<FileSelect
-			{limit}
-			{activeFile}
-			{isOverLimit}
-			class="fileselect flex h-40 w-70 items-center justify-center overflow-clip rounded-md border-3 border-dashed transition"
-			setActiveFile={(file) => {
-				activeFile = file;
-			}}
-		/>
-		<Button disabled={isOverLimit || !activeFile} onclick={upload}>Upload</Button>
-	</Card>
-	<Card class="">
-		{#each uploadQueue as upload (upload.id)}
-			<div>
-				<UploadCard {upload} />
-			</div>
-		{/each}
+<div class="flex h-full w-screen grow items-center justify-center gap-10">
+	<Card class="flex h-full gap-4 p-12">
+		<div class="flex flex-col items-center justify-center gap-6 lg:w-1/2">
+			<FileSelect
+				{limit}
+				{activeFile}
+				{isOverLimit}
+				class="fileselect flex h-40 w-full items-center justify-center overflow-clip rounded-md border-3 border-dashed transition"
+				setActiveFile={(file) => {
+					activeFile = file;
+				}}
+			/>
+			<Button disabled={isOverLimit || !activeFile} onclick={upload} class="w-full">Upload</Button>
+		</div>
+		<div class="flex h-min max-h-full snap-y flex-col overflow-auto rounded-xl lg:max-w-1/2">
+			{#each uploadQueue as upload (upload.id)}
+				<div class="max-w-full snap-center odd:bg-uploadcard-odd even:bg-uploadcard-even">
+					<UploadCard {upload} />
+				</div>
+			{/each}
+		</div>
 	</Card>
 </div>

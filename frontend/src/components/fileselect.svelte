@@ -60,7 +60,9 @@
 			{activeFile.name}
 		</p>
 	{:else}
-		<p class="text-sm text-dropzone-text">Drag a file here or click to upload a file</p>
+		<p class="w-5/6 text-center text-sm text-dropzone-text">
+			Drag a file here or click to upload a file
+		</p>
 	{/if}
 
 	{#if limit}

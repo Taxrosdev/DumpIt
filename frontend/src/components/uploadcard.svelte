@@ -8,7 +8,7 @@
 </script>
 
 <button
-	class="flex h-16 flex-col justify-around px-6 py-2 text-left"
+	class="flex h-16 w-full flex-col justify-around px-6 py-2 text-left"
 	onclick={() => {
 		if (upload.url) {
 			navigator.clipboard.writeText(upload.url);
@@ -22,7 +22,7 @@
 >
 	<span class="truncate text-sm text-uploadcard-text">{upload.filename}</span>
 	{#if upload.url}
-		<span class="truncate text-xs text-uploadcard-text/75">
+		<span class="w-5/6 truncate text-xs text-uploadcard-text/75">
 			{#if copied}
 				Copied!
 			{:else}
@@ -30,7 +30,7 @@
 			{/if}
 		</span>
 	{:else if upload.err}
-		<span class="truncate text-xs text-uploadcard-text/75">
+		<span class="w-5/6 truncate text-xs text-uploadcard-text/75">
 			Error! {upload.err}
 		</span>
 	{:else}

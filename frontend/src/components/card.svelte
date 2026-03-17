@@ -3,7 +3,7 @@
 </script>
 
 <div
-	class={'flex flex-col justify-center bg-background-card lg:h-120 lg:w-90 lg:rounded-4xl ' +
+	class={'flex h-full w-full flex-col justify-center bg-background-card lg:h-120 lg:w-160 lg:flex-row lg:rounded-4xl ' +
 		className}
 >
 	{@render children()}
