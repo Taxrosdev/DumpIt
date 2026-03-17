@@ -3,6 +3,7 @@ pub mod schema;
 use model::*;
 use schema::*;
 
+use chrono::{Duration, Utc};
 use diesel::prelude::*;
 use diesel::r2d2::ConnectionManager;
 use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
@@ -78,5 +79,19 @@ impl Database {
             .select(Upload::as_select())
             .first(&mut conn)
             .optional()
+    }
+
+    pub fn cleanup(&self) {
+        let mut conn = self.pool.get().unwrap();
+
+        let cutoff = Utc::now() - Duration::hours(24);
+
+        let num_deleted =
+            diesel::delete(uploads::table.filter(uploads::timestamp.lt(cutoff.timestamp())))
+                .execute(&mut conn)
+                .expect("Could not perform cleanups");
+
+        println!("Cleaned up {num_deleted} uploads");
+        // File cleanup stratagy?
     }
 }

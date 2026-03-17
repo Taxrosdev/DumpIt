@@ -61,3 +61,15 @@ async fn shutdown_signal() {
 
     println!("signal received, starting graceful shutdown");
 }
+
+async fn cleanup_timer() {
+    use tokio::time::{MissedTickBehavior, interval};
+
+    let mut interval = interval(std::time::Duration::from_hours(1));
+    interval.set_missed_tick_behavior(MissedTickBehavior::Skip);
+
+    loop {
+        interval.tick().await;
+        DATABASE.cleanup().await;
+    }
+}
