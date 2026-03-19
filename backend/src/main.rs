@@ -72,6 +72,6 @@ async fn cleanup_timer() {
 
     loop {
         interval.tick().await;
-        DATABASE.cleanup().await;
+        DATABASE.cleanup();
     }
 }
