@@ -23,6 +23,8 @@ async fn main() {
     // In bytes
     let upload_limit = get_upload_limit() * 1024 * 1024;
 
+    tokio::spawn(async move { cleanup_timer().await });
+
     let app = Router::new()
         .route("/upload", post(upload))
         .route("/download/{hash}", get(download))
