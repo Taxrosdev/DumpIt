@@ -24,6 +24,14 @@ const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 type DbPool = diesel::r2d2::Pool<ConnectionManager<DbConnection>>;
 
+pub struct UploadEntry {
+    pub id: String,
+    pub filename: String,
+    pub timestamp: i64,
+    pub size: i32,
+    pub hash: String,
+}
+
 fn establish_pool() -> DbPool {
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let manager = ConnectionManager::<DbConnection>::new(database_url);
@@ -47,7 +55,7 @@ impl Database {
         }
     }
 
-    /// Returns a new id
+    /// Returns the id of the new upload
     pub fn create_upload(&self, hash: String, size: i32, filename: String) -> String {
         let id = nanoid!();
 
@@ -69,16 +77,23 @@ impl Database {
         id
     }
 
-    pub fn get_upload(&self, id: &str) -> Result<Option<Upload>, diesel::result::Error> {
+    pub fn get_upload(&self, id: &str) -> Result<Option<UploadEntry>, diesel::result::Error> {
         use schema::uploads::dsl::uploads;
 
         let mut conn = self.pool.get().unwrap();
 
-        uploads
+        Ok(uploads
             .find(id)
             .select(Upload::as_select())
             .first(&mut conn)
-            .optional()
+            .optional()?
+            .map(|upload| UploadEntry {
+                id: upload.id,
+                filename: upload.filename,
+                timestamp: upload.timestamp,
+                size: upload.size,
+                hash: upload.hash,
+            }))
     }
 
     pub fn cleanup(&self) {
